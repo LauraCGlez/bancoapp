@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.banco.bancoapp.controllers.OperacionesController">
+   <children>
+      <TextField layoutX="89.0" layoutY="112.0" />
+      <TextField layoutX="372.0" layoutY="112.0" />
+      <Label layoutX="114.0" layoutY="89.0" text="Número de cuenta" />
+      <Label layoutX="416.0" layoutY="318.0" text="Cuenta destino" />
+      <Label layoutX="238.0" layoutY="38.0" text="MIS OPERACIONES" />
+      <Button layoutX="103.0" layoutY="227.0" mnemonicParsing="false" text="INGRESAR" />
+      <Button layoutX="270.0" layoutY="227.0" mnemonicParsing="false" text="RETIRAR" />
+      <Button layoutX="427.0" layoutY="227.0" mnemonicParsing="false" text="TRASFERIR" />
+      <Label layoutX="423.0" layoutY="89.0" text="Cantidad" />
+      <TextField layoutX="416.0" layoutY="293.0" />
+      <Button layoutX="275.0" layoutY="343.0" mnemonicParsing="false" onAction="#volver" text="Volver" />
+   </children>
+</AnchorPane>

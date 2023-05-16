@@ -1,0 +1,39 @@
+/* estilos.css */
+
+.root {
+    -fx-background-color: #f0f0f0;
+}
+
+.table-view {
+    -fx-table-cell-border-color: transparent;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #f0f0f0;
+}
+
+.table-row-cell {
+    -fx-background-color: #ffffff;
+}
+
+.text-field {
+    -fx-prompt-text-fill: #aaaaaa;
+}
+
+.button {
+    -fx-background-color: #4caf50;
+    -fx-text-fill: #ffffff;
+}
+
+.button:hover {
+    -fx-background-color: #45a049;
+}
+
+.button:pressed {
+    -fx-background-color: #3c903c;
+}
+
+.button:focused {
+    -fx-background-color: #3c903c;
+    -fx-border-color: transparent;
+}

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<?import javafx.scene.control.skin.TabPaneSkin.TabHeaderSkin?>
+<VBox stylesheets="css/estilos.css" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.banco.bancoapp.controllers.MenuController">
+   <children>
+      <MenuBar>
+        <menus>
+          <Menu mnemonicParsing="false" text="File" />
+          <Menu mnemonicParsing="false" text="Menu">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Menu" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <Label text="Bienvenid@!" textFill="#501890">
+         <VBox.margin>
+            <Insets left="30.0" top="20.0" />
+         </VBox.margin>
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Label>
+      <Separator prefWidth="200.0" />
+      <Label text="Por favor introduzca su NIF y elija la accion que desea realizar.">
+         <VBox.margin>
+            <Insets left="10.0" />
+         </VBox.margin></Label>
+      <TextField fx:id="nifTextField">
+         <VBox.margin>
+            <Insets left="10.0" right="500.0" />
+         </VBox.margin>
+      </TextField>
+       <TextField fx:id="cuentaTextField">
+           <VBox.margin>
+               <Insets left="10.0" right="500.0" />
+           </VBox.margin>
+       </TextField>
+       <Label fx:id="erroresLabel" />
+      <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" spacing="10.0">
+         <children>
+            <Button mnemonicParsing="false" text="Modificar mis datos" />
+            <Button mnemonicParsing="false" onAction="#triggerCrearCuenta" text="Crear cuenta" />
+             <Button onAction="#triggerListarCuentasPorUsuarios" text="Mis cuentas" />
+            <Button mnemonicParsing="false"  text="Operar en cuenta" onAction="#operar">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin></Button>
+            <Button mnemonicParsing="false" text="Listar titulares" onAction="#listarTitulares"/>
+            <Button mnemonicParsing="false" text="Añadir titular" onAction="#triggerAñadir"/>
+            <Button mnemonicParsing="false" text="Eliminar titular" onAction="#triggerEliminar"/>
+            <Button mnemonicParsing="false" text="Transacciones" onAction="#triggerOperaciones">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Button>
+         </children>
+         <VBox.margin>
+            <Insets left="10.0" right="10.0" top="20.0" />
+         </VBox.margin>
+         <padding>
+            <Insets top="10.0" />
+         </padding>
+      </HBox>
+       <TableView fx:id="tablaCuentas" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0">
+           <columns>
+               <TableColumn fx:id="cuentaColumn" prefWidth="150.0" text="Cuenta Bancaria" />
+               <TableColumn fx:id="fechaColumn" prefWidth="150.0" text="Fecha Creacion" />
+               <TableColumn fx:id="saldoColumn" prefWidth="150.0" text="Saldo" />
+           </columns>
+         <VBox.margin>
+            <Insets top="50.0" />
+         </VBox.margin>
+       </TableView>
+       <TableView fx:id="operacionesTabla" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0">
+           <columns>
+               <TableColumn fx:id="codigoOpColum" prefWidth="150.0" text="Codigo de la operacion" />
+               <TableColumn fx:id="tipoOpColum" prefWidth="150.0" text="Tipo de operacion" />
+               <TableColumn fx:id="cantidadColum" prefWidth="150.0" text="Cantidad" />
+               <TableColumn fx:id="fechaOpColum" prefWidth="150.0" text="Fecha" />
+           </columns>
+           <VBox.margin>
+               <Insets top="50.0" />
+           </VBox.margin>
+       </TableView>
+       <TableView fx:id="titularesTabla" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0">
+           <columns>
+               <TableColumn fx:id="nombreColumn" prefWidth="150.0" text="Nombre" />
+               <TableColumn fx:id="nifColum" prefWidth="150.0" text="Nif" />
+           </columns>
+           <VBox.margin>
+               <Insets top="50.0" />
+           </VBox.margin>
+       </TableView>
+      <Button mnemonicParsing="false" onAction="#volver" text="Salir">
+         <VBox.margin>
+            <Insets left="260.0" top="50.0" />
+         </VBox.margin>
+      </Button>
+
+   </children>
+</VBox>

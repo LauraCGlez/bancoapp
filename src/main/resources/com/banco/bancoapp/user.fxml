@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="400.0" prefWidth="600.0" stylesheets="css/estilos.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.banco.bancoapp.controllers.UserController">
+    <TableView fx:id="userTable" prefHeight="216.0" prefWidth="560.0">
+        <columns>
+            <TableColumn fx:id="nifColumn" text="NIF" />
+            <TableColumn fx:id="nombreColumn" text="Nombre" />
+            <TableColumn fx:id="apellidosColumn" text="Apellidos" />
+            <TableColumn fx:id="anyoNacimientoColumn" text="Año de Nacimiento" />
+            <TableColumn fx:id="direccionColumn" text="Dirección" />
+            <TableColumn fx:id="emailColumn" text="Email" />
+            <TableColumn fx:id="telefonoColumn" text="Teléfono" />
+        </columns>
+    </TableView>
+   <TextField fx:id="nifTF" prefHeight="25.0" prefWidth="120.0">
+      <VBox.margin>
+         <Insets right="450.0" />
+      </VBox.margin>
+   </TextField>
+
+
+   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="55.0">
+      <children>
+
+          <Button onAction="#listarUsuarios" text="Listar Usuarios" />
+          <Button onAction="#modificarUsuario" text="Modificar Usuario" />
+          <Button onAction="#eliminarUsuario" text="Eliminar Usuario" />
+         <Button mnemonicParsing="false" onAction="#volver" text="Volver" />
+
+      </children>
+      <VBox.margin>
+         <Insets top="20.0" />
+      </VBox.margin>
+   </HBox>
+
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+</VBox>
