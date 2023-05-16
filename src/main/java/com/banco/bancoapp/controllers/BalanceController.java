@@ -57,7 +57,7 @@ public class BalanceController {
     }
 
 
-    //----> MUESTRA EL SALDO DE LA CUENTS button Mostrar saldo ok
+    //----> MUESTRA EL SALDO DE LA CUENTA button Mostrar saldo ok
     @FXML
     private void triggerSaldo(){
         int cuenta = Integer.parseInt(numeroCuentaTextField.getText());

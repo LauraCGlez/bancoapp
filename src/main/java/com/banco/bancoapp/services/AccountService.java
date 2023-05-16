@@ -177,6 +177,8 @@ public class AccountService {
         return transactionModels;
     }
 
+
+
     public Set<TransactionModel> gastos(int cuenta, TipoOpModel tipoOpModel){
         Set<TransactionModel> transactionModels = new HashSet<>();
         Optional<AccountModel> optional = listarCuentas(cuenta);
@@ -189,7 +191,6 @@ public class AccountService {
         return transactionModels;
     }
 
-
     public double getSaldo(int cuenta){
         Optional<AccountModel> optional = listarCuentas(cuenta);
         if (optional.isPresent()){
@@ -198,6 +199,32 @@ public class AccountService {
         }
         return 0;
     }
+
+    public void actualizarSaldoIngresado(int numeroCuenta, double cantidad) {
+        Optional<AccountModel> optional = accountRepo.findById(numeroCuenta);
+        if (optional.isPresent()) {
+            AccountModel accountModel = optional.get();
+            double saldoActualizado = accountModel.getSaldo() + cantidad;
+            accountModel.setSaldo(saldoActualizado);
+            accountRepo.save(accountModel);
+        } else {
+            throw new IllegalArgumentException("La cuenta no existe");
+        }
+    }
+    public void actualizarSaldoRetirado(int numeroCuenta, double cantidad) {
+        Optional<AccountModel> optional = accountRepo.findById(numeroCuenta);
+        if (optional.isPresent()) {
+            AccountModel accountModel = optional.get();
+            double saldoActualizado = accountModel.getSaldo() - cantidad;
+            accountModel.setSaldo(saldoActualizado);
+            accountRepo.save(accountModel);
+        } else {
+            throw new IllegalArgumentException("La cuenta no existe");
+        }
+    }
+
+
+
 
     private UserModel findUserByNif(String nif){
         List<UserModel> lista = userRepo.findUserByNif(nif);

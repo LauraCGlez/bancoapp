@@ -22,7 +22,7 @@ public class BancoappApplication extends Application {
     public void start(Stage stage) throws IOException {
         this.stage = stage;
         stage.show();
-        scene = new Scene(loadFXML("login"), 700, 700);
+        scene = new Scene(loadFXML("operaciones"), 700, 700);
         stage.setMinHeight(700);
         stage.setMinWidth(700);
         stage.setTitle("Banco");
