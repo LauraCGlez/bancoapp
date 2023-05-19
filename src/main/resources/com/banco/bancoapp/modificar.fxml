@@ -6,45 +6,47 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.banco.bancoapp.controllers.ModificarUsuarioController">
-    <Label alignment="CENTER" contentDisplay="CENTER" text="NIF">
-      <VBox.margin>
-         <Insets top="10.0" />
-      </VBox.margin></Label>
-    <TextField fx:id="nifTextField" />
-    <Label text="Nombre">
+<VBox prefHeight="700.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.banco.bancoapp.controllers.ModificarUsuarioController">
+   <Label text="Nif" />
+    <TextField fx:id="passTextField" />
+    <Label alignment="CENTER" contentDisplay="CENTER" text="Contraseña">
       <VBox.margin>
          <Insets top="10.0" />
       </VBox.margin></Label>
     <TextField fx:id="nombreTextField" />
-    <Label text="Apellidos">
+    <Label text="Nombre">
       <VBox.margin>
          <Insets top="10.0" />
       </VBox.margin></Label>
     <TextField fx:id="apellidosTextField" />
-    <Label text="Año de Nacimiento">
+    <Label text="Apellidos">
       <VBox.margin>
          <Insets top="10.0" />
       </VBox.margin></Label>
     <TextField fx:id="añoNacimientoTextField" />
-    <Label text="Dirección">
+    <Label text="Año de Nacimiento">
       <VBox.margin>
          <Insets top="10.0" />
       </VBox.margin></Label>
     <TextField fx:id="direccionTextField" />
-    <Label text="Email">
+    <Label text="Dirección">
       <VBox.margin>
          <Insets top="10.0" />
       </VBox.margin></Label>
     <TextField fx:id="emailTextField" />
-    <Label text="Teléfono">
+    <Label text="Email">
       <VBox.margin>
          <Insets top="10.0" />
       </VBox.margin></Label>
     <TextField fx:id="telefonoTextField" />
-
-    <Button onAction="#guardarCambios" text="Guardar cambios" >
+    <Label text="Teléfono">
       <VBox.margin>
-         <Insets left="250.0" top="10.0" />
+         <Insets top="10.0" />
+      </VBox.margin></Label>
+   <TextField fx:id="nifTextField" />
+
+    <Button onAction="#modificarUsuario" text="Guardar cambios" textAlignment="CENTER">
+      <VBox.margin>
+         <Insets left="280.0" top="30.0" />
       </VBox.margin></Button>
 </VBox>

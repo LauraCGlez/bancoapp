@@ -2,13 +2,15 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox prefHeight="400.0" prefWidth="600.0" stylesheets="css/estilos.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.banco.bancoapp.controllers.UserController">
+<VBox prefHeight="700.0" prefWidth="700.0" stylesheets="css/styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.banco.bancoapp.controllers.UserController">
     <TableView fx:id="userTable" prefHeight="216.0" prefWidth="560.0">
         <columns>
             <TableColumn fx:id="nifColumn" text="NIF" />
@@ -18,11 +20,30 @@
             <TableColumn fx:id="direccionColumn" text="Dirección" />
             <TableColumn fx:id="emailColumn" text="Email" />
             <TableColumn fx:id="telefonoColumn" text="Teléfono" />
+            <TableColumn fx:id="passColumn" text="Contraseña" />
         </columns>
     </TableView>
-   <TextField fx:id="nifTF" prefHeight="25.0" prefWidth="120.0">
+    <TableView fx:id="accountTable" prefHeight="251.0" prefWidth="660.0">
+        <columns>
+            <TableColumn fx:id="numeroColumn" prefWidth="131.0" text="Número de cuenta" />
+            <TableColumn fx:id="saldoColumn" prefWidth="111.5" text="Saldo" />
+            <TableColumn fx:id="fechaColumn" prefWidth="155.5" text="Fecha de creacion" />
+        </columns>
+    </TableView>
+   <TableView prefHeight="241.0" prefWidth="660.0">
+     <columns>
+       <TableColumn prefWidth="112.0" text="Cantidad" />
+         <TableColumn minWidth="4.5" prefWidth="156.5" text="Tipo de operación" />
+     </columns>
+   </TableView>
+   <Label text="Ingrese un número de cuenta para saber las operaciones realizadas">
+      <font>
+         <Font size="14.0" />
+      </font>
+   </Label>
+   <TextField fx:id="nifTF" prefHeight="25.0" prefWidth="158.0">
       <VBox.margin>
-         <Insets right="450.0" />
+         <Insets right="550.0" />
       </VBox.margin>
    </TextField>
 
@@ -30,10 +51,10 @@
    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="55.0">
       <children>
 
-          <Button onAction="#listarUsuarios" text="Listar Usuarios" />
-          <Button onAction="#modificarUsuario" text="Modificar Usuario" />
-          <Button onAction="#eliminarUsuario" text="Eliminar Usuario" />
-         <Button mnemonicParsing="false" onAction="#volver" text="Volver" />
+          <Button onAction="#listarUsuarios" text="Listar usuarios" />
+          <Button onAction="#listarCuentas" text="Listar cuentas" />
+          <Button onAction="#listarOperaciones" text="Listar operaciones" />
+          <Button mnemonicParsing="false" onAction="#volver" text="Volver" />
 
       </children>
       <VBox.margin>

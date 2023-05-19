@@ -7,6 +7,7 @@ import com.banco.bancoapp.models.UserModel;
 import com.banco.bancoapp.repositories.AccountRepo;
 import com.banco.bancoapp.repositories.TransactionRepo;
 import com.banco.bancoapp.repositories.UserRepo;
+import javafx.scene.control.Alert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,18 +26,18 @@ public class AccountService {
     private TransactionRepo transactionRepo;
 
     public Iterable<TransactionModel> operaciones(String cuenta){
+
         return transactionRepo.findAllByCodigoOp(cuenta);
     }
 
     //LISTAR CUENTAS POR UN IDENTIFICADOR
-    public Optional<AccountModel> listarCuentas(int cuenta){
+    public Optional<AccountModel> listarCuentasPorId(int cuenta){
 
         return accountRepo.findById(cuenta);
     }
 
     //LISTAR TODAS LAS CUENTAS
     public Iterable<AccountModel> listarCuentas(){
-
         return accountRepo.findAll();
     }
 
@@ -68,13 +69,12 @@ public class AccountService {
                 }
             }
         }
-
         return msg;
     }
 
     public Set<UserModel> listarTitulares(int cuenta){
         Set<UserModel> lista = new HashSet<>();
-        Optional<AccountModel> optional = listarCuentas(cuenta);
+        Optional<AccountModel> optional = listarCuentasPorId(cuenta);
 
         if (optional.isPresent()){
             AccountModel accountModel = optional.get();
@@ -85,27 +85,17 @@ public class AccountService {
 
     //APARTADO 3
     //ELIMINAR TITULAR DE LA CUENTA
-    public void eliminarUsuarioDeCuenta(String nif, int cuenta){
-                AccountModel accountModel = listarCuentas(cuenta).get();
-                UserModel userModel = findUserByNif(nif);
-                Set<UserModel> userModels = accountModel.getUserModels();
-//                List<UserModel> userList = new ArrayList<>(userModels);
-                userModels.remove(userModel);
-                accountRepo.save(accountModel);
-                /*
-                accountModel.getUserModels().remove(userModel);
-                accountRepo.delete(accountModel);*/
-
-
-
-
+    public void eliminarUsuario(String nif, int cuenta){
+        if (listarTitulares(cuenta).size() > 1){
+            userRepo.deleteByNifAndAccountModelsContaining(nif, cuenta);
+        }
     }
 
     //AÑADIR TITULAR A LA CUENTA
     public void añadirUsuarioCuenta(String nif, int cuenta){
         if (listarTitulares(cuenta).size() < 2){
             try {
-                AccountModel accountModel = listarCuentas(cuenta).get();
+                AccountModel accountModel = listarCuentasPorId(cuenta).get();
                 UserModel userModel = findUserByNif(nif);
                 accountModel.getUserModels().add(userModel);
                 accountRepo.save(accountModel);
@@ -115,59 +105,20 @@ public class AccountService {
         }
     }
 
-
-    //APARTADO 5
     public List<AccountModel> listarCuentasPorUsuarios(String nif){
         List<AccountModel> accountModels = new ArrayList<>();
-
         try {
             UserModel userModel = findUserByNif(nif);
             accountModels = accountRepo.findAccountModelsByUserModelsContaining(userModel);
         } catch (Exception e){
             e.printStackTrace();
         }
-
         return accountModels;
     }
 
-    /*
-    public Set<TransactionModel> listarOp(int cuenta){
-        Set<TransactionModel> transactionModelsO = new HashSet<>();
-        Set<TransactionModel> transactionModelsD = new HashSet<>();
-
-        Optional<AccountModel> optional = listarCuentas(cuenta);
-
-        if (optional.isPresent()){
-            AccountModel accountModel = optional.get();
-            transactionModelsO = accountModel.getTransactionOrigen();
-            transactionModelsD = accountModel.getTransactionDestino();
-        }
-
-        return (transactionModelsO, transactionModelsD);
-    }*/
-
-    //APARTADO 6
-    /*
-    public Set<TransactionModel> listarOp(int cuenta, TipoOpModel tipoOpModel){
-        Set<TransactionModel> transactionModels = new HashSet<>();
-        Optional<AccountModel> optional = listarCuentas(cuenta);
-
-        if (optional.isPresent()){
-            AccountModel accountModel = optional.get();
-
-            if (tipoOpModel == TipoOpModel.INGRESAR){
-                transactionModels = accountModel.getTransactionDestino();
-            } else if(tipoOpModel == TipoOpModel.RETIRAR){
-                transactionModels = accountModel.getTransactionOrigen();
-            }
-        }
-
-        return transactionModels;
-    }*/
-
     public  Set<TransactionModel> ingresos(int cuenta, TipoOpModel tipoOpModel){
         Set<TransactionModel> transactionModels = new HashSet<>();
-        Optional<AccountModel> optional = listarCuentas(cuenta);
+        Optional<AccountModel> optional = listarCuentasPorId(cuenta);
 
         if (optional.isPresent()) {
             tipoOpModel.equals(TipoOpModel.INGRESAR);
@@ -177,11 +128,9 @@ public class AccountService {
         return transactionModels;
     }
 
-
-
     public Set<TransactionModel> gastos(int cuenta, TipoOpModel tipoOpModel){
         Set<TransactionModel> transactionModels = new HashSet<>();
-        Optional<AccountModel> optional = listarCuentas(cuenta);
+        Optional<AccountModel> optional = listarCuentasPorId(cuenta);
 
         if (optional.isPresent()) {
             tipoOpModel.equals(TipoOpModel.RETIRAR);
@@ -191,48 +140,64 @@ public class AccountService {
         return transactionModels;
     }
 
+    public void actualizarSaldoIngresado(int numeroCuenta, double cantidad) {
+        try {
+            Optional<AccountModel> optional = accountRepo.findById(numeroCuenta);
+            if (optional.isPresent()) {
+                AccountModel accountModel = optional.get();
+                double saldoActualizado = accountModel.getSaldo() + cantidad;
+                accountModel.setSaldo(saldoActualizado);
+                accountRepo.save(accountModel);
+            } else {
+                throw new IllegalArgumentException("La cuenta no existe");
+            }
+        } catch (IllegalArgumentException e) {
+                mostrarMensaje(e.getMessage());
+        }
+    }
+
+    public void actualizarSaldoRetirado(int numeroCuenta, double cantidad) {
+        try {
+            Optional<AccountModel> optional = accountRepo.findById(numeroCuenta);
+            if (optional.isPresent()) {
+                AccountModel accountModel = optional.get();
+                double saldoActualizado = accountModel.getSaldo() - cantidad;
+                if (saldoActualizado < 0) {
+                    throw new IllegalArgumentException("Saldo insuficiente");
+                }
+                accountModel.setSaldo(saldoActualizado);
+                accountRepo.save(accountModel);
+            } else {
+                throw new IllegalArgumentException("La cuenta no existe");
+            }
+        } catch (IllegalArgumentException e) {
+            mostrarMensaje(e.getMessage());
+        }
+    }
+
     public double getSaldo(int cuenta){
-        Optional<AccountModel> optional = listarCuentas(cuenta);
-        if (optional.isPresent()){
-            AccountModel accountModel = optional.get();
-            return accountModel.getSaldo();
+        try {
+            Optional<AccountModel> optional = listarCuentasPorId(cuenta);
+            if (optional.isPresent()){
+                AccountModel accountModel = optional.get();
+                return accountModel.getSaldo();
+            }
+        } catch (IllegalArgumentException e){
+            mostrarMensaje("El numero de cuenta es incorrecto");
         }
         return 0;
     }
-
-    public void actualizarSaldoIngresado(int numeroCuenta, double cantidad) {
-        Optional<AccountModel> optional = accountRepo.findById(numeroCuenta);
-        if (optional.isPresent()) {
-            AccountModel accountModel = optional.get();
-            double saldoActualizado = accountModel.getSaldo() + cantidad;
-            accountModel.setSaldo(saldoActualizado);
-            accountRepo.save(accountModel);
-        } else {
-            throw new IllegalArgumentException("La cuenta no existe");
-        }
-    }
-    public void actualizarSaldoRetirado(int numeroCuenta, double cantidad) {
-        Optional<AccountModel> optional = accountRepo.findById(numeroCuenta);
-        if (optional.isPresent()) {
-            AccountModel accountModel = optional.get();
-            double saldoActualizado = accountModel.getSaldo() - cantidad;
-            accountModel.setSaldo(saldoActualizado);
-            accountRepo.save(accountModel);
-        } else {
-            throw new IllegalArgumentException("La cuenta no existe");
-        }
-    }
-
-
-
 
     private UserModel findUserByNif(String nif){
         List<UserModel> lista = userRepo.findUserByNif(nif);
         return lista.get(0);
     }
 
-
-
+    public void mostrarMensaje(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Mensaje");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
 }
-
-

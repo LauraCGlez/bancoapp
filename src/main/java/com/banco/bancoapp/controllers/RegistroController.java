@@ -2,6 +2,7 @@ package com.banco.bancoapp.controllers;
 
 import com.banco.bancoapp.BancoappApplication;
 import com.banco.bancoapp.models.UserModel;
+import com.banco.bancoapp.services.AccountService;
 import com.banco.bancoapp.services.UserService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -16,6 +17,8 @@ import java.io.IOException;
 public class RegistroController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private AccountService accountService;
 
     @FXML
     private TextField nifTextField;
@@ -31,14 +34,12 @@ public class RegistroController {
     private TextField emailTextField;
     @FXML
     private TextField telefonoTextField;
+    @FXML
+    private TextField passTextField;
     private Stage stage;
 
-    public void setStage(Stage stage){
-        this.stage = stage;
-    }
-
     @FXML
-    private void crearUsuario(){
+    public void crearUsuario() {
         String nif = nifTextField.getText();
         String nombre = nombreTextField.getText();
         String apellidos = apellidosTextField.getText();
@@ -46,42 +47,40 @@ public class RegistroController {
         String direccion = direccionTextField.getText();
         String email = emailTextField.getText();
         int telefono = Integer.parseInt(telefonoTextField.getText());
-
-        UserModel userModel = new UserModel();
-        userModel.setNif(nif);
-        userModel.setNombre(nombre);
-        userModel.setApellidos(apellidos);
-        userModel.setAnyoNacimiento(añoNacimiento);
-        userModel.setDireccion(direccion);
-        userModel.setEmail(email);
-        userModel.setTelefono(telefono);
+        String pass = passTextField.getText();
 
         try {
-            String msg = userService.crearUsuario(userModel);
-//            label.setText(msg);
-            nifTextField.clear();
-            nombreTextField.clear();
-            apellidosTextField.clear();
-            añoNacimientoTextField.clear();
-            direccionTextField.clear();
-            emailTextField.clear();
-            telefonoTextField.clear();
+            if (nif.isEmpty() || nombre.isEmpty() || apellidos.isEmpty() || añoNacimiento.isEmpty() || direccion.isEmpty() || email.isEmpty() || pass.isEmpty() || telefonoTextField.getText().isEmpty()) {
+                accountService.mostrarMensaje("No puede haber campos vacíos");
+                return; // Sale del método si hay campos vacíos
+            }
 
-            mensaje("El usuario se ha creado correctamente");
+            if (nif.length() != 9) {
+                accountService.mostrarMensaje("NIF incorrecto");
+                return; // Sale del método si el NIF es incorrecto
+            }
 
+            if (!validarEmail(email)) {
+                accountService.mostrarMensaje("Formato de email incorrecto");
+                return; // Sale del método si el formato de email es incorrecto
+            }
+
+            UserModel userModel = new UserModel();
+            userModel.setNif(nif);
+            UserService.extracto(nombre, apellidos, añoNacimiento, direccion, email, telefono, pass, userModel, userService, nifTextField, nombreTextField, apellidosTextField, añoNacimientoTextField, direccionTextField, emailTextField, telefonoTextField, passTextField);
+
+            accountService.mostrarMensaje("Usuario creado correctamente");
             stage.close();
-
-        } catch (RuntimeException e){
-            System.out.println("Error al crear el usuario: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            accountService.mostrarMensaje("Teléfono debe ser un número válido");
+        } catch (RuntimeException e) {
+            accountService.mostrarMensaje("Error al crear el usuario");
         }
     }
 
-    private void mensaje(String mensaje){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Mensaje");
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
+    private boolean  validarEmail(String email){
+        String regex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+        return email.matches(regex);
     }
 
     @FXML

@@ -5,11 +5,11 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="200.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.banco.bancoapp.controllers.LoginController" stylesheets="css/estilos.css">
+<VBox prefHeight="200.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.banco.bancoapp.controllers.LoginController" stylesheets="css/styles.css">
    <Label text="Nombre" />
    <TextField fx:id="campoNombre" />
-   <Label text="Email" />
-   <TextField fx:id="campoEmail" />
+   <Label text="Contraseña" />
+   <TextField fx:id="campoPass" />
    <Button text="Iniciar sesión" onAction="#login" />
    <Label>Si no tienes cuenta puedes registrarte</Label>
    <Button text="Registrarse" onAction="#registrarse"></Button>

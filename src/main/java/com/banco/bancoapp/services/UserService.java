@@ -1,10 +1,10 @@
 package com.banco.bancoapp.services;
 import com.banco.bancoapp.models.UserModel;
 import com.banco.bancoapp.repositories.UserRepo;
+import javafx.scene.control.TextField;
+import org.apache.logging.log4j.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class UserService {
@@ -12,53 +12,59 @@ public class UserService {
     private UserRepo userRepo;
 
     public Iterable<UserModel> listarUsuarios(){
-
         return userRepo.findAll();
     }
 
     //CREAMOS UN USUARIO
     public String crearUsuario(UserModel userModel) {
-        String msg;
+        String msg = "";
         if (userRepo.existsById(userModel.getNif())){
             msg = "El usuario ya existe. Error al crear usuario";
-//            throw new RuntimeException("Este usuario con NIF " + userModel.getNif() + " ya existe");
         } else {
             userRepo.save(userModel);
-            msg = "El usuario se ha creado";
         }
-
         return msg;
     }
 
-    //APARTADO 2
-    public void modificarUsuario(UserModel userModel){
-        try {
-            UserModel newUser = listarUsuarios(userModel.getNif());
-            newUser.setAnyoNacimiento(userModel.getAnyoNacimiento());
-            newUser.setNombre(userModel.getNombre());
-            newUser.setApellidos(userModel.getApellidos());
-            newUser.setEmail(userModel.getEmail());
-            newUser.setTelefono(userModel.getTelefono());
-            newUser.setDireccion(userModel.getDireccion());
+    public static void extracto(String nombre, String apellidos, String añoNacimiento, String direccion, String email, int telefono, String pass, UserModel userModel, UserService userService, TextField nifTextField, TextField nombreTextField, TextField apellidosTextField, TextField añoNacimientoTextField, TextField direccionTextField, TextField emailTextField, TextField telefonoTextField, TextField passTextField) {
+        userModel.setNombre(nombre);
+        userModel.setApellidos(apellidos);
+        userModel.setAnyoNacimiento(añoNacimiento);
+        userModel.setDireccion(direccion);
+        userModel.setEmail(email);
+        userModel.setTelefono(telefono);
+        userModel.setPass(pass);
 
-        } catch (Exception e){
+        userService.crearUsuario(userModel);
+
+        nifTextField.clear();
+        nombreTextField.clear();
+        apellidosTextField.clear();
+        añoNacimientoTextField.clear();
+        direccionTextField.clear();
+        emailTextField.clear();
+        telefonoTextField.clear();
+        passTextField.clear();
+    }
+
+    //TODO ARREGLAR
+    public void modificar(UserModel updatedUser) {
+
+        try {
+            UserModel dbUser = (UserModel) userRepo.findUserByNif(updatedUser.getNif());
+            dbUser.setNombre(updatedUser.getNombre());
+            dbUser.setApellidos(updatedUser.getApellidos());
+            dbUser.setAnyoNacimiento(updatedUser.getAnyoNacimiento());
+            dbUser.setDireccion(updatedUser.getDireccion());
+            dbUser.setTelefono(updatedUser.getTelefono());
+            dbUser.setEmail(updatedUser.getEmail());
+            dbUser.setPass(updatedUser.getPass());
+            userRepo.save(dbUser);
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
+
     }
-
-    //ELIMINAR USUARIO POR NIF
-    public void eliminarUsuario(String nif){
-
-        userRepo.deleteById(nif);
-    }
-
-
-    //APARTADO 4
-    public UserModel listarUsuarios(String nif){
-        List<UserModel> lista = userRepo.findUserByNif(nif);
-        return lista.get(0);
-    }
-
-
-
 }

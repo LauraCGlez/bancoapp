@@ -1,21 +1,33 @@
 package com.banco.bancoapp.controllers;
 
+import com.banco.bancoapp.BancoappApplication;
 import com.banco.bancoapp.models.UserModel;
+import com.banco.bancoapp.repositories.UserRepo;
+import com.banco.bancoapp.services.AccountService;
 import com.banco.bancoapp.services.UserService;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
+import java.io.IOException;
+
+import static com.banco.bancoapp.services.UserService.extracto;
 
 @Controller
 public class ModificarUsuarioController {
 
     @Autowired
     private UserService userService;
-
-    @FXML
-    private TextField nifTextField;
+    @Autowired
+    private UserRepo userRepo;
+    @Autowired
+    private RegistroController registroController;
+    private UserModel userModel;
+    @Autowired
+    private AccountService accountService;
     @FXML
     private TextField nombreTextField;
     @FXML
@@ -28,53 +40,39 @@ public class ModificarUsuarioController {
     private TextField emailTextField;
     @FXML
     private TextField telefonoTextField;
-
-    private UserModel usuario;
-
-    public ModificarUsuarioController() {
-    }
-
-    public void setUsuario(UserModel usuario) {
-        this.usuario = usuario;
-
-        // Mostrar los datos del usuario en los campos de entrada
-        nifTextField.setText(usuario.getNif());
-        nombreTextField.setText(usuario.getNombre());
-        apellidosTextField.setText(usuario.getApellidos());
-        añoNacimientoTextField.setText(usuario.getAnyoNacimiento());
-        direccionTextField.setText(usuario.getDireccion());
-        emailTextField.setText(usuario.getEmail());
-        telefonoTextField.setText(String.valueOf(usuario.getTelefono()));
-    }
+    @FXML
+    private TextField passTextField;
+    @FXML
+    private TextField nifTextField;
+    @Autowired
+    private MenuController menuController;
 
     @FXML
-    private void guardarCambios() {
-        // Obtener los valores modificados de los campos de entrada
-        String nuevoNombre = nombreTextField.getText();
-        String nuevosApellidos = apellidosTextField.getText();
-        String nuevoAñoNacimiento =añoNacimientoTextField.getText();
-        String nuevaDireccion = direccionTextField.getText();
-        String nuevoEmail = emailTextField.getText();
-        String nuevoTelefono = String.valueOf(telefonoTextField);
+    private void modificarUsuario () throws IOException {
+        String nif = nifTextField.getText();
+        String nombre = nombreTextField.getText();
+        String apellidos = apellidosTextField.getText();
+        String añoNacimiento = añoNacimientoTextField.getText();
+        String direccion = direccionTextField.getText();
+        String email = emailTextField.getText();
+        int telefono = Integer.parseInt(telefonoTextField.getText());
+        String pass = passTextField.getText();
 
-        // Actualizar los datos del usuario
-        usuario.setNombre(nuevoNombre);
-        usuario.setApellidos(nuevosApellidos);
-        usuario.setAnyoNacimiento(nuevoAñoNacimiento);
-        usuario.setDireccion(nuevaDireccion);
-        usuario.setEmail(nuevoEmail);
-        usuario.setTelefono(Integer.parseInt(nuevoTelefono));
+        // Crear un objeto UserModel con los valores actualizados
+        UserModel updatedUser = new UserModel();
+        updatedUser.setNif(nif);
+        updatedUser.setNombre(nombre);
+        updatedUser.setApellidos(apellidos);
+        updatedUser.setAnyoNacimiento(añoNacimiento);
+        updatedUser.setDireccion(direccion);
+        updatedUser.setEmail(email);
+        updatedUser.setTelefono(telefono);
+        updatedUser.setPass(pass);
 
-        // Llamar al método de UserService para modificar el usuario
-        userService.modificarUsuario(usuario);
+        // Llamar al método modificar del servicio UserService
+        userService.modificar(updatedUser);
 
-        // Mostrar un mensaje de éxito
-       // mostrarMensaje("Usuario modificado correctamente");
-
-        // Cerrar la ventana de modificación de usuario
-        Stage stage = (Stage) nifTextField.getScene().getWindow();
-        stage.close();
+        BancoappApplication.switchRoot("menu");
     }
-
 
 }

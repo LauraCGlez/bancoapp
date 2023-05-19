@@ -20,11 +20,8 @@ public class OperacionesController {
     private AccountService accountService;
     @Autowired
     private TransactionService transactionService;
-    @Autowired
-    private BalanceController balanceController;
     @FXML
     private Label saldoLabel;
-
     @FXML
     public TextField numeroCuentaTextField;
     @FXML
@@ -33,18 +30,16 @@ public class OperacionesController {
     @FXML
     private void ingresarDinero() {
         if (cantidadTextField.getText().isEmpty() || numeroCuentaTextField.getText().isEmpty()){
-            mostrarMensaje("Debe rellenar los campos Número de cuenta y cantidad " +
+            mostrarMensaje("Debe rellenar los campos número de cuenta y cantidad " +
                     "para poder realizar la operación");
         } else {
             double cantidad = Double.parseDouble(cantidadTextField.getText());
             int cuenta = Integer.parseInt(numeroCuentaTextField.getText());
             double saldo = accountService.getSaldo(cuenta) ;
             accountService.actualizarSaldoIngresado(cuenta, cantidad);
-
             cantidadTextField.setText(String.valueOf(saldo));
             cantidadTextField.clear();
         }
-
     }
     @FXML
     private void retirarDinero() {

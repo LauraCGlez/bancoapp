@@ -2,6 +2,8 @@ package com.banco.bancoapp.controllers;
 
 import com.banco.bancoapp.BancoappApplication;
 import com.banco.bancoapp.models.AccountModel;
+import com.banco.bancoapp.models.TipoOpModel;
+import com.banco.bancoapp.models.TransactionModel;
 import com.banco.bancoapp.models.UserModel;
 import com.banco.bancoapp.services.AccountService;
 import com.banco.bancoapp.services.UserService;
@@ -21,6 +23,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Controller
 public class UserController {
@@ -46,25 +52,17 @@ public class UserController {
     @FXML
     private TableColumn<UserModel, Integer> telefonoColumn;
     @FXML
-    private TextField nifTF;
-    @PersistenceContext
-    private EntityManager entityManager;
-
+    private TableColumn<UserModel, String> passColumn;
     @FXML
-    private void eliminarUsuario() {
-        if (nifTF == null) {
-            String mensaje = "Debe introducir un NIF";
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Mensaje");
-            alert.setContentText(mensaje);
-            alert.showAndWait();
-        } else {
-            String nif = nifTF.getText();
-            UserModel user = userService.listarUsuarios(nif);
-
-        }
-    }
-
+    private TextField nifTF;
+    @FXML
+    private TableView<AccountModel> accountTable;
+    @FXML
+    private TableColumn<AccountModel, Integer> numeroColumn;
+    @FXML
+    private TableColumn<AccountModel, Double> saldoColumn;
+    @FXML
+    private TableColumn<AccountModel, String> fechaColumn;
 
     @FXML
     private void initialize() {
@@ -75,128 +73,39 @@ public class UserController {
         direccionColumn.setCellValueFactory(new PropertyValueFactory<UserModel, String>("direccion"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<UserModel, String>("email"));
         telefonoColumn.setCellValueFactory(new PropertyValueFactory<UserModel, Integer>("telefono"));
+        passColumn.setCellValueFactory(new PropertyValueFactory<UserModel, String>("pass"));
+
+        numeroColumn.setCellValueFactory(new PropertyValueFactory<AccountModel, Integer>("numeroCuenta"));
+        saldoColumn.setCellValueFactory(new PropertyValueFactory<AccountModel, Double>("saldo"));
+        fechaColumn.setCellValueFactory(new PropertyValueFactory<AccountModel, String>("fechaCreacion"));
     }
 
     //APARTADO 4
     @FXML
     private void listarUsuarios() {
-        // Obtener la lista de usuarios del servicio
         Iterable<UserModel> usuarios = userService.listarUsuarios();
-
-        // Limpiar la tabla
         userTable.getItems().clear();
-
-        // Agregar los usuarios a la tabla
         usuarios.forEach(userTable.getItems()::add);
     }
 
-
-
-/*
+    //TODO listar operaciones de una determinada cuenta
     @FXML
-    private void modificarUsuario() {
-        // Obtener el usuario seleccionado en la tabla
-        UserModel usuarioSeleccionado = userTable.getSelectionModel().getSelectedItem();
+    public void listarOperaciones(){
+        /*String numeroCuenta = cuentaTextField.getText();
+        Iterable<TransactionModel> transactionModels = accountService.operaciones(numeroCuenta);
+        List<TransactionModel> transactionModelList = StreamSupport.stream(transactionModels.spliterator(), false).collect(Collectors.toList());
 
-        if (usuarioSeleccionado != null) {
-            // Realizar la modificación del usuario utilizando el servicio
-            userService.modificarUsuario(usuarioSeleccionado);
-
-            // Mostrar un mensaje de éxito
-            mostrarMensaje("Usuario modificado correctamente");
-            userTable.refresh();
-        } else {
-            // Mostrar un mensaje de error si no se seleccionó ningún usuario
-            mostrarMensaje("Seleccione un usuario para modificar");
-        }
-    }*/
-    /*
-
-    @FXML
-    private void eliminarUsuario() {
-        // Obtener el usuario seleccionado en la tabla
-        UserModel usuarioSeleccionado = userTable.getSelectionModel().getSelectedItem();
-
-        if (usuarioSeleccionado != null) {
-            // Obtener el NIF del usuario seleccionado
-            String nif = usuarioSeleccionado.getNif();
-
-            // Eliminar el usuario utilizando el servicio
-            userService.eliminarUsuario(nif);
-
-            // Mostrar un mensaje de éxito
-            mostrarMensaje("Usuario eliminado correctamente");
-
-            // Actualizar la tabla de usuarios
-            listarUsuarios();
-            userTable.refresh();
-        } else {
-            // Mostrar un mensaje de error si no se seleccionó ningún usuario
-            mostrarMensaje("Seleccione un usuario para eliminar");
-        }
+        operacionesTabla.getItems().setAll(transactionModelList);
+        operacionesTabla.refresh();*/
     }
 
-
-     */
-
-    //OJO CODIGO NUEVO SIN
-    //APARTADO 2
-
+    //TODO listar las cuentas de un determinado usuario
     @FXML
-    private void modificarUsuario() {
-        // Obtener el usuario seleccionado en la tabla
-        UserModel usuarioSeleccionado = userTable.getSelectionModel().getSelectedItem();
-
-        if (usuarioSeleccionado != null) {
-            // Abrir la ventana de modificación de usuario
-            abrirVentanaModificarUsuario(usuarioSeleccionado);
-        } else {
-            // Mostrar un mensaje de error si no se seleccionó ningún usuario
-            mostrarMensaje("Seleccione un usuario para modificar");
-        }
+    private void listarCuentas(){
+        Iterable<AccountModel> cuentas = accountService.listarCuentas();
+        accountTable.getItems().clear();
+        cuentas.forEach(cuenta -> accountTable.getItems().add(cuenta));
     }
-
-    private void abrirVentanaModificarUsuario(UserModel usuario) {
-        try {
-            // Cargar el archivo FXML de la ventana de modificación de usuario
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("modificar.fxml"));
-            Parent root = loader.load();
-
-            // Obtener el controlador de la ventana de modificación de usuario
-            ModificarUsuarioController modificarUsuarioController = loader.getController();
-
-            // Pasar el usuario seleccionado al controlador de la ventana de modificación
-            modificarUsuarioController.setUsuario(usuario);
-
-            // Crear una nueva ventana y mostrarla
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Modificar Usuario");
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-/*
-    @FXML
-    public void triggerListarCuentasPorUsuarios(){
-        Iterable<AccountModel> accountModels = accountService.listarCuentas();
-        tablaCuentas.getItems().clear();
-        accountModels.forEach(tablaCuentas.getItems()::add);
-        tablaCuentas.refresh();
-
-    }*/
-
-
-    private void mostrarMensaje(String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Mensaje");
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
-    }
-
     @FXML
     public void volver() throws IOException{
         BancoappApplication.switchRoot("login");

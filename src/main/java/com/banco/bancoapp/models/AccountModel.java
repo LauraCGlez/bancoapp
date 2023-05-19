@@ -37,6 +37,7 @@ public class AccountModel {
     @OneToMany(mappedBy = "cuentaDestino", fetch = FetchType.EAGER)
     private Set<TransactionModel> cuentaDestino = new HashSet<>();
 
+
     //TODO QUITAR ESTO DE AQUI
     public boolean retirarDinero(double cantidad){
         boolean posible = false;
@@ -49,5 +50,55 @@ public class AccountModel {
     public void ingresarDinero(double cantidad){
 
         saldo += cantidad;
+    }
+
+    //TODO GENERATE GETTER AND SETTER
+
+    public int getNumeroCuenta() {
+        return numeroCuenta;
+    }
+
+    public void setNumeroCuenta(int numeroCuenta) {
+        this.numeroCuenta = numeroCuenta;
+    }
+
+    public Set<TransactionModel> getCuentaDestino() {
+        return cuentaDestino;
+    }
+
+    public void setCuentaDestino(Set<TransactionModel> cuentaDestino) {
+        this.cuentaDestino = cuentaDestino;
+    }
+
+    public String getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(String fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    public Set<UserModel> getUserModels() {
+        return userModels;
+    }
+
+    public void setUserModels(Set<UserModel> userModels) {
+        this.userModels = userModels;
+    }
+
+    public Set<TransactionModel> getCuentaOrigen() {
+        return cuentaOrigen;
+    }
+
+    public void setCuentaOrigen(Set<TransactionModel> cuentaOrigen) {
+        this.cuentaOrigen = cuentaOrigen;
+    }
+
+    public double getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
     }
 }

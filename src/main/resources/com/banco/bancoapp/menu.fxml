@@ -14,8 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.control.skin.TabPaneSkin.TabHeaderSkin?>
-<VBox stylesheets="css/estilos.css" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.banco.bancoapp.controllers.MenuController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="700.0" stylesheets="css/styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.banco.bancoapp.controllers.MenuController">
    <children>
       <MenuBar>
         <menus>
@@ -45,6 +44,11 @@
          <VBox.margin>
             <Insets left="10.0" />
          </VBox.margin></Label>
+      <Button mnemonicParsing="false" onAction="#triggerCrearCuenta" text="Crear cuenta">
+         <VBox.margin>
+            <Insets left="500.0" />
+         </VBox.margin>
+      </Button>
       <TextField fx:id="nifTextField">
          <VBox.margin>
             <Insets left="10.0" right="500.0" />
@@ -56,26 +60,45 @@
            </VBox.margin>
        </TextField>
        <Label fx:id="erroresLabel" />
-      <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" spacing="10.0">
+      <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="130.0" prefWidth="580.0" spacing="50.0">
          <children>
-            <Button mnemonicParsing="false" text="Modificar mis datos" />
-            <Button mnemonicParsing="false" onAction="#triggerCrearCuenta" text="Crear cuenta" />
-             <Button onAction="#triggerListarCuentasPorUsuarios" text="Mis cuentas" />
-            <Button mnemonicParsing="false"  text="Operar en cuenta" onAction="#operar">
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin></Button>
-            <Button mnemonicParsing="false" text="Listar titulares" onAction="#listarTitulares"/>
-            <Button mnemonicParsing="false" text="Añadir titular" onAction="#triggerAñadir"/>
-            <Button mnemonicParsing="false" text="Eliminar titular" onAction="#triggerEliminar"/>
-            <Button mnemonicParsing="false" text="Transacciones" onAction="#triggerOperaciones">
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </Button>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Button mnemonicParsing="false" text="Modificar mis datos" onAction="#modificar"/>
+                  <Button mnemonicParsing="false" onAction="#listarTitulares" text="Listar titulares">
+                     <VBox.margin>
+                        <Insets top="40.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+            </VBox>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                   <Button onAction="#triggerListarCuentasPorUsuarios" text="Mis cuentas" />
+                  <Button mnemonicParsing="false" onAction="#operar" text="Operar en cuenta">
+                     <VBox.margin>
+                        <Insets top="40.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+            </VBox>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#triggerAñadir" text="Añadir titular">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#triggerEliminar" prefHeight="31.0" prefWidth="147.0" text="Eliminar titular">
+                     <VBox.margin>
+                        <Insets top="40.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+            </VBox>
          </children>
          <VBox.margin>
-            <Insets left="10.0" right="10.0" top="20.0" />
+            <Insets left="60.0" right="10.0" top="5.0" />
          </VBox.margin>
          <padding>
             <Insets top="10.0" />
@@ -84,36 +107,25 @@
        <TableView fx:id="tablaCuentas" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0">
            <columns>
                <TableColumn fx:id="cuentaColumn" prefWidth="150.0" text="Cuenta Bancaria" />
-               <TableColumn fx:id="fechaColumn" prefWidth="150.0" text="Fecha Creacion" />
+               <TableColumn fx:id="fechaColumn" prefWidth="150.0" text="FechaCreación" />
                <TableColumn fx:id="saldoColumn" prefWidth="150.0" text="Saldo" />
            </columns>
          <VBox.margin>
-            <Insets top="50.0" />
+            <Insets top="20.0" />
          </VBox.margin>
        </TableView>
-       <TableView fx:id="operacionesTabla" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0">
-           <columns>
-               <TableColumn fx:id="codigoOpColum" prefWidth="150.0" text="Codigo de la operacion" />
-               <TableColumn fx:id="tipoOpColum" prefWidth="150.0" text="Tipo de operacion" />
-               <TableColumn fx:id="cantidadColum" prefWidth="150.0" text="Cantidad" />
-               <TableColumn fx:id="fechaOpColum" prefWidth="150.0" text="Fecha" />
-           </columns>
-           <VBox.margin>
-               <Insets top="50.0" />
-           </VBox.margin>
-       </TableView>
-       <TableView fx:id="titularesTabla" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0">
+       <TableView fx:id="titularesTabla" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="96.0" prefWidth="436.0">
            <columns>
                <TableColumn fx:id="nombreColumn" prefWidth="150.0" text="Nombre" />
                <TableColumn fx:id="nifColum" prefWidth="150.0" text="Nif" />
            </columns>
            <VBox.margin>
-               <Insets top="50.0" />
+               <Insets top="10.0" />
            </VBox.margin>
        </TableView>
       <Button mnemonicParsing="false" onAction="#volver" text="Salir">
          <VBox.margin>
-            <Insets left="260.0" top="50.0" />
+            <Insets left="310.0" top="50.0" />
          </VBox.margin>
       </Button>
 

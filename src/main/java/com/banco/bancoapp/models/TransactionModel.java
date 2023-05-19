@@ -39,4 +39,62 @@ public class TransactionModel {
     @ManyToOne
     @JoinColumn(name = "usuario", referencedColumnName = "nif")
     private UserModel user;
+
+    //TODO GETTER AND SETTER
+
+    public int getCodigoOp() {
+        return codigoOp;
+    }
+
+    public void setCodigoOp(int codigoOp) {
+        this.codigoOp = codigoOp;
+    }
+
+    public TipoOpModel getTipoOp() {
+        return tipoOp;
+    }
+
+    public void setTipoOp(TipoOpModel tipoOp) {
+        this.tipoOp = tipoOp;
+    }
+
+    public LocalDate getFechaOp() {
+        return fechaOp;
+    }
+
+    public void setFechaOp(LocalDate fechaOp) {
+        this.fechaOp = fechaOp;
+    }
+
+    public double getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(double cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public AccountModel getCuentaOrigen() {
+        return cuentaOrigen;
+    }
+
+    public void setCuentaOrigen(AccountModel cuentaOrigen) {
+        this.cuentaOrigen = cuentaOrigen;
+    }
+
+    public AccountModel getCuentaDestino() {
+        return cuentaDestino;
+    }
+
+    public void setCuentaDestino(AccountModel cuentaDestino) {
+        this.cuentaDestino = cuentaDestino;
+    }
+
+    public UserModel getUser() {
+        return user;
+    }
+
+    public void setUser(UserModel user) {
+        this.user = user;
+    }
 }

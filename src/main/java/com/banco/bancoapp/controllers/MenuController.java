@@ -2,6 +2,7 @@ package com.banco.bancoapp.controllers;
 
 import com.banco.bancoapp.BancoappApplication;
 import com.banco.bancoapp.models.AccountModel;
+import com.banco.bancoapp.models.TipoOpModel;
 import com.banco.bancoapp.models.TransactionModel;
 import com.banco.bancoapp.models.UserModel;
 import com.banco.bancoapp.services.AccountService;
@@ -10,8 +11,12 @@ import com.banco.bancoapp.services.UserService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import org.apache.logging.log4j.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +27,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
+import static com.banco.bancoapp.services.UserService.extracto;
 
 @Controller
 public class MenuController {
@@ -34,16 +41,6 @@ public class MenuController {
     private TransactionService transactionService;
     @FXML
     private Label erroresLabel;
-    @FXML
-    private TableView<TransactionModel> operacionesTabla;
-    @FXML
-    private TableColumn<TransactionModel, Integer> codigoOpColum;
-    @FXML
-    private TableColumn<TransactionModel, String> tipoOpColum;
-    @FXML
-    private TableColumn<TransactionModel, Double> cantidadColum;
-    @FXML
-    private TableColumn<TransactionModel, LocalDate> fechaOpColum;
     @FXML
     private TextField cuentaTextField;
     @FXML
@@ -62,13 +59,42 @@ public class MenuController {
     private TableColumn<UserModel, String> nombreColumn;
     @FXML
     private TableColumn<UserModel, String> nifColum;
+    @FXML
+    private TextField nombreTextField;
+    @FXML
+    private TextField apellidosTextField;
+    @FXML
+    private TextField añoNacimientoTextField;
+    @FXML
+    private TextField direccionTextField;
+    @FXML
+    private TextField emailTextField;
+    @FXML
+    private TextField telefonoTextField;
+    @FXML
+    private TextField passTextField;
 
+    @FXML
+    private void initialize() {
+        cuentaColumn.setCellValueFactory(new PropertyValueFactory<>("numeroCuenta"));
+        fechaColumn.setCellValueFactory(new PropertyValueFactory<>("fechaCreacion"));
+        saldoColumn.setCellValueFactory(new PropertyValueFactory<>("saldo"));
 
-    //APARTADO 1 ---> crear cuenta button ok
+        /*
+        codigoOpColum.setCellValueFactory(new PropertyValueFactory<>("codigoOp"));
+        tipoOpColum.setCellValueFactory(new PropertyValueFactory<>("tipoOp"));
+        cantidadColum.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
+        fechaOpColum.setCellValueFactory(new PropertyValueFactory<>("fechaOp"));
+
+         */
+        nombreColumn.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        nifColum.setCellValueFactory(new PropertyValueFactory<>("nif"));
+    }
+
     @FXML
     public void triggerCrearCuenta() {
 
-        if (nifTextField == null){
+        if (nifTextField == null) {
             String mensaje = "Debe introducir un NIF";
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Mensaje");
@@ -83,33 +109,17 @@ public class MenuController {
         }
     }
 
-    //APARTADO 5, MAL PORQUE NO ESTA LISTANDO POR NIF, SINO PONIENDO TODAS ----> mis cuentas button ok
     @FXML
-    public void triggerListarCuentasPorUsuarios(){
+    public void triggerListarCuentasPorUsuarios() {
         String nif = nifTextField.getText();
         Iterable<AccountModel> accountModels = accountService.listarCuentasPorUsuarios(nif);
         tablaCuentas.getItems().clear();
         accountModels.forEach(tablaCuentas.getItems()::add);
         tablaCuentas.refresh();
-
     }
 
-
-
-    //APARTADO 6 ----> transacciones button
     @FXML
-    public void triggerOperaciones(){
-        String numeroCuenta = cuentaTextField.getText();
-        Iterable<TransactionModel> transactionModels = accountService.operaciones(numeroCuenta);
-        List<TransactionModel> transactionModelList = StreamSupport.stream(transactionModels.spliterator(), false).collect(Collectors.toList());
-
-        operacionesTabla.getItems().setAll(transactionModelList);
-        operacionesTabla.refresh();
-    }
-
-    //APARTADO 3 ----> añadir titular button
-    @FXML
-    public void triggerAñadir(){
+    public void triggerAñadir() {
         int numeroCuenta = Integer.parseInt(cuentaTextField.getText());
         String nif = nifTextField.getText();
         accountService.añadirUsuarioCuenta(nif, numeroCuenta);
@@ -121,51 +131,38 @@ public class MenuController {
     private void triggerEliminar() {
         int numeroCuenta = Integer.parseInt(cuentaTextField.getText());
         String nif = nifTextField.getText();
-        accountService.eliminarUsuarioDeCuenta(nif, numeroCuenta);
+        accountService.eliminarUsuario(nif, numeroCuenta);
     }
 
-    //----> LISTAR TITULARES DE UNA CUENTA
     @FXML
     public void listarTitulares() {
         int cuenta = Integer.parseInt(cuentaTextField.getText());
-        Iterable<UserModel> titulares = accountService.listarTitulares(cuenta);
-        titularesTabla.getItems().clear();
-        titulares.forEach(titularesTabla.getItems()::add);
-    }
-
-    @FXML
-    private void initialize() {
-        cuentaColumn.setCellValueFactory(new PropertyValueFactory<>("numeroCuenta"));
-        fechaColumn.setCellValueFactory(new PropertyValueFactory<>("fechaCreacion"));
-        saldoColumn.setCellValueFactory(new PropertyValueFactory<>("saldo"));
-
-        codigoOpColum.setCellValueFactory(new PropertyValueFactory<>("codigoOp"));
-        tipoOpColum.setCellValueFactory(new PropertyValueFactory<>("tipoOp"));
-        cantidadColum.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
-        fechaOpColum.setCellValueFactory(new PropertyValueFactory<>("fechaOp"));
-
-        nombreColumn.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-        nifColum.setCellValueFactory(new PropertyValueFactory<>("nif"));
+        if (!cuentaTextField.equals(null)) {
+            Iterable<UserModel> titulares = accountService.listarTitulares(cuenta);
+            titularesTabla.getItems().clear();
+            titulares.forEach(titularesTabla.getItems()::add);
+        } else {
+            accountService.mostrarMensaje("Debe ingresar un numero de cuenta");
+        }
     }
 
     public String crearCuenta(UserModel userModel) {
         return accountService.crearCuenta(new AccountModel(), userModel);
     }
 
-
-
-    //APARTADO 7
-
-    //APARTADO 8
-
     @FXML
-    public void volver() throws IOException{
+    public void volver() throws IOException {
         BancoappApplication.switchRoot("login");
     }
 
     @FXML
-    public void operar() throws IOException{
+    public void operar() throws IOException {
         BancoappApplication.switchRoot("operaciones");
+    }
+
+    @FXML
+    public void modificar() throws IOException{
+        BancoappApplication.switchRoot("modificar");
     }
 
 }
