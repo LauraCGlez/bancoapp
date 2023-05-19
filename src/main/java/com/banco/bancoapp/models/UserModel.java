@@ -3,7 +3,9 @@ package com.banco.bancoapp.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -19,19 +21,19 @@ public class UserModel {
     @Column(name = "nif", length = 9, nullable = false)
     private String nif;
 
-    @Column(name = "apellidos")
+    @Column(name = "apellidos", length = 100)
     private String apellidos;
 
-    @Column(name = "nombre")
+    @Column(name = "nombre", length = 100)
     private String nombre;
 
     @Column(name = "anyo_nacimiento", length = 4)
     private String anyoNacimiento;
 
-    @Column(name = "direccion")
+    @Column(name = "direccion", length = 100)
     private String direccion;
 
-    @Column(name = "email")
+    @Column(name = "email", length = 50)
     private String email;
 
     @Column(name = "telefono", length = 9)
@@ -41,10 +43,9 @@ public class UserModel {
     private String pass;
 
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "userModels", cascade = CascadeType.ALL)
-    private Set<AccountModel> accountModels = new HashSet<>();
+    private List<AccountModel> accountModels = new ArrayList<AccountModel>();
 
     //TODO GETTER AND SETTER
-
     public String getNif() {
         return nif;
     }
@@ -109,11 +110,21 @@ public class UserModel {
         this.pass = pass;
     }
 
-    public Set<AccountModel> getAccountModels() {
+    public List<AccountModel> getAccountModels() {
         return accountModels;
     }
 
-    public void setAccountModels(Set<AccountModel> accountModels) {
+    public void listAccountModels(List<AccountModel> accountModels) {
         this.accountModels = accountModels;
+    }
+
+    public void addAccount(AccountModel accountModel){
+        this.accountModels.add(accountModel);
+        accountModel.getUserModels().add(this);
+    }
+
+    public void removeAccount(AccountModel accountModel){
+        this.accountModels.remove(accountModel);
+        accountModel.getUserModels().remove(this);
     }
 }

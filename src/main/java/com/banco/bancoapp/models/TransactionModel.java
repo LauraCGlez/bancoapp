@@ -22,7 +22,7 @@ public class TransactionModel {
     @Column(name = "tipo_op")
     private TipoOpModel tipoOp;
 
-    @Column(name = "fecha_op")
+    @Column(name = "fecha_op", length = 10)
     private LocalDate fechaOp;
 
     @Column(name = "cantidad")

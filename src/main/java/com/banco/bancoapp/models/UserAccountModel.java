@@ -23,4 +23,28 @@ public class UserAccountModel {
     @MapsId("cuentaBanco")
     @JoinColumn(name = "cuenta_banco", referencedColumnName = "numero_cuenta")
     private AccountModel accountModel;
+
+    public UserAccountIdModel getId() {
+        return id;
+    }
+
+    public void setId(UserAccountIdModel id) {
+        this.id = id;
+    }
+
+    public UserModel getUserModel() {
+        return userModel;
+    }
+
+    public void setUserModel(UserModel userModel) {
+        this.userModel = userModel;
+    }
+
+    public AccountModel getAccountModel() {
+        return accountModel;
+    }
+
+    public void setAccountModel(AccountModel accountModel) {
+        this.accountModel = accountModel;
+    }
 }

@@ -1,5 +1,6 @@
 .root {
-    -fx-background-color: #f0f0f0;
+    -fx-background-color:#E8EAF6;
+    -fx-padding: 15px; /* Margen lateral */
 }
 
 .table-view {
@@ -7,7 +8,7 @@
 }
 
 .table-view .column-header-background {
-    -fx-background-color: #f0f0f0;
+    -fx-background-color: #E8EAF0;
 }
 
 .table-row-cell {
@@ -16,22 +17,40 @@
 
 .text-field {
     -fx-prompt-text-fill: #aaaaaa;
+    -fx-font-size: 12px; /* Tamaño de los textfield más pequeño */
 }
 
 .button {
-    -fx-background-color: #4caf50;
+    -fx-background-color: #D1B2FF; /* Morado claro */
     -fx-text-fill: #ffffff;
+    -fx-font-family:"Times New Roman', serif";
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 5px 10px;
+    -fx-background-radius: 5px;
+    -fx-pref-width: 150px; /* Establece el ancho preferido de los botones */
 }
 
 .button:hover {
-    -fx-background-color: #45a049;
+    -fx-background-color: #A081E6; /* Morado oscuro */
+    -fx-alignment: center;
 }
 
 .button:pressed {
-    -fx-background-color: #3c903c;
+    -fx-background-color: #7F5BB5; /* Morado más oscuro */
 }
 
 .button:focused {
-    -fx-background-color: #3c903c;
+    -fx-background-color: #7F5BB5; /* Morado más oscuro */
     -fx-border-color: transparent;
+}
+
+.button:hover .text {
+    -fx-alignment: center;
+}
+
+#icon {
+    -fx-graphic: url("com/banco/bancoapp/banco.png"); /* Ruta de la imagen del icono del banco */
+    -fx-fit-height: 24px; /* Ajustar el alto del icono */
+    -fx-fit-width: 24px; /* Ajustar el ancho del icono */
 }

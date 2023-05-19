@@ -4,6 +4,8 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -27,6 +29,9 @@ public class BancoappApplication extends Application {
         stage.setMinWidth(700);
         stage.setTitle("Banco");
         stage.setScene(scene);
+        Image icon = new Image(getClass().getResourceAsStream("banco.png"));
+        stage.getIcons().add(icon);
+
         stage.show();
     }
 

@@ -12,6 +12,7 @@ public class UserService {
     private UserRepo userRepo;
 
     public Iterable<UserModel> listarUsuarios(){
+
         return userRepo.findAll();
     }
 
@@ -49,7 +50,6 @@ public class UserService {
 
     //TODO ARREGLAR
     public void modificar(UserModel updatedUser) {
-
         try {
             UserModel dbUser = (UserModel) userRepo.findUserByNif(updatedUser.getNif());
             dbUser.setNombre(updatedUser.getNombre());
@@ -60,11 +60,8 @@ public class UserService {
             dbUser.setEmail(updatedUser.getEmail());
             dbUser.setPass(updatedUser.getPass());
             userRepo.save(dbUser);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 }

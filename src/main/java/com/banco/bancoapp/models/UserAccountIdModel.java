@@ -13,10 +13,10 @@ import java.io.Serializable;
 @Embeddable
 public class UserAccountIdModel implements Serializable {
 
-    @Column(name = "user_nif")
+    @Column(name = "user_nif", length = 9)
     private String userNif;
 
-    @Column(name = "cuenta_banco")
+    @Column(name = "cuenta_banco", length = 10)
     private int cuentaBanco;
 
 }

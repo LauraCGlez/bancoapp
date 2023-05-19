@@ -85,11 +85,19 @@ public class AccountService {
 
     //APARTADO 3
     //ELIMINAR TITULAR DE LA CUENTA
+    /*
     public void eliminarUsuario(String nif, int cuenta){
         if (listarTitulares(cuenta).size() > 1){
-            userRepo.deleteByNifAndAccountModelsContaining(nif, cuenta);
+            try {
+                AccountModel accountModel = listarCuentasPorId(cuenta).get();
+                UserModel userModel = findUserByNif(nif);
+                accountModel.getUserModels().remove(userModel);
+                accountRepo.save(accountModel);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         }
-    }
+    } */
 
     //AÑADIR TITULAR A LA CUENTA
     public void añadirUsuarioCuenta(String nif, int cuenta){

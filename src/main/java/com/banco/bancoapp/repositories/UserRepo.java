@@ -11,4 +11,5 @@ public interface UserRepo extends CrudRepository<UserModel, String> {
    List<UserModel> deleteByNifAndAccountModelsContaining(String nif, int cuenta);
    List<UserModel> findUserByNif(String nif);
    UserModel findUserModelByNombreIgnoreCaseAndPass(String nombre, String pass);
+
 }

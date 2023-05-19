@@ -6,19 +6,29 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <VBox prefHeight="700.0" prefWidth="700.0" stylesheets="css/styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.banco.bancoapp.controllers.UserController">
+   <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+      <VBox.margin>
+         <Insets left="320.0" />
+      </VBox.margin>
+      <image>
+         <Image url="@banco.png" />
+      </image>
+   </ImageView>
     <TableView fx:id="userTable" prefHeight="216.0" prefWidth="560.0">
         <columns>
-            <TableColumn fx:id="nifColumn" text="NIF" />
-            <TableColumn fx:id="nombreColumn" text="Nombre" />
-            <TableColumn fx:id="apellidosColumn" text="Apellidos" />
-            <TableColumn fx:id="anyoNacimientoColumn" text="Año de Nacimiento" />
-            <TableColumn fx:id="direccionColumn" text="Dirección" />
-            <TableColumn fx:id="emailColumn" text="Email" />
+            <TableColumn fx:id="nifColumn" prefWidth="59.5" text="NIF" />
+            <TableColumn fx:id="nombreColumn" prefWidth="81.5" text="Nombre" />
+            <TableColumn fx:id="apellidosColumn" prefWidth="83.5" text="Apellidos" />
+            <TableColumn fx:id="anyoNacimientoColumn" prefWidth="119.5" text="Año de Nacimiento" />
+            <TableColumn fx:id="direccionColumn" prefWidth="67.5" text="Dirección" />
+            <TableColumn fx:id="emailColumn" prefWidth="68.5" text="Email" />
             <TableColumn fx:id="telefonoColumn" text="Teléfono" />
             <TableColumn fx:id="passColumn" text="Contraseña" />
         </columns>

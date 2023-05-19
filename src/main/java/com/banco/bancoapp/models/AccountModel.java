@@ -15,13 +15,13 @@ import java.util.Set;
 public class AccountModel {
 
     @Id
-    @Column(name = "numero_cuenta", nullable = false)
+    @Column(name = "numero_cuenta", nullable = false, length = 10)
     private int numeroCuenta;
 
     @Column(name = "saldo", nullable = false)
     private double saldo = 0;
 
-    @Column(name = "fecha_creacion")
+    @Column(name = "fecha_creacion", length = 10)
     private String fechaCreacion;
 
     @ManyToMany(fetch = FetchType.EAGER)

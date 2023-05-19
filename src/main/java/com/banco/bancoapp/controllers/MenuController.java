@@ -5,8 +5,10 @@ import com.banco.bancoapp.models.AccountModel;
 import com.banco.bancoapp.models.TipoOpModel;
 import com.banco.bancoapp.models.TransactionModel;
 import com.banco.bancoapp.models.UserModel;
+import com.banco.bancoapp.repositories.UserRepo;
 import com.banco.bancoapp.services.AccountService;
 import com.banco.bancoapp.services.TransactionService;
+import com.banco.bancoapp.services.UserAccountService;
 import com.banco.bancoapp.services.UserService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -39,6 +41,10 @@ public class MenuController {
     private UserService userService;
     @Autowired
     private TransactionService transactionService;
+    @Autowired
+    private UserAccountService userAccountService;
+    @Autowired
+    private UserRepo userRepo;
     @FXML
     private Label erroresLabel;
     @FXML
@@ -131,7 +137,8 @@ public class MenuController {
     private void triggerEliminar() {
         int numeroCuenta = Integer.parseInt(cuentaTextField.getText());
         String nif = nifTextField.getText();
-        accountService.eliminarUsuario(nif, numeroCuenta);
+        UserModel user = (UserModel) userRepo.findUserByNif(nif);
+        userAccountService.eliminarUsuario(String.valueOf(user), numeroCuenta);
     }
 
     @FXML
