@@ -2,8 +2,10 @@ package com.banco.bancoapp.services;
 import com.banco.bancoapp.models.UserModel;
 import com.banco.bancoapp.repositories.UserRepo;
 import javafx.scene.control.TextField;
+import org.apache.catalina.User;
 import org.apache.logging.log4j.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,13 +18,21 @@ public class UserService {
         return userRepo.findAll();
     }
 
-    //CREAMOS UN USUARIO
+    public UserModel findUserByNif(String nif) {
+        return userRepo.findByNif(nif);
+    }
+
     public String crearUsuario(UserModel userModel) {
-        String msg = "";
-        if (userRepo.existsById(userModel.getNif())){
-            msg = "El usuario ya existe. Error al crear usuario";
-        } else {
-            userRepo.save(userModel);
+        String msg;
+        try {
+            if (userRepo.existsById(userModel.getNif())){
+                msg = "El usuario ya existe. Error al crear usuario";
+            } else {
+                userRepo.save(userModel);
+                msg = "Usuario guardado";
+            }
+        } catch (DataAccessException e){
+            msg = "Error al crear el usuario: " + e.getMessage();
         }
         return msg;
     }
@@ -48,20 +58,18 @@ public class UserService {
         passTextField.clear();
     }
 
-    //TODO ARREGLAR
-    public void modificar(UserModel updatedUser) {
+    public String updateUser(UserModel userModel) {
+        String msg;
         try {
-            UserModel dbUser = (UserModel) userRepo.findUserByNif(updatedUser.getNif());
-            dbUser.setNombre(updatedUser.getNombre());
-            dbUser.setApellidos(updatedUser.getApellidos());
-            dbUser.setAnyoNacimiento(updatedUser.getAnyoNacimiento());
-            dbUser.setDireccion(updatedUser.getDireccion());
-            dbUser.setTelefono(updatedUser.getTelefono());
-            dbUser.setEmail(updatedUser.getEmail());
-            dbUser.setPass(updatedUser.getPass());
-            userRepo.save(dbUser);
-        } catch (Exception e) {
-            e.printStackTrace();
+            if (userRepo.findById(userModel.getNif()).isPresent()) {
+                userRepo.save(userModel);
+                msg = "El usuario ha sido modificado!";
+            } else {
+                msg = "No hay ningún usuario registrado con ese NIF";
+            }
+        } catch (DataAccessException ex) {
+            msg = "Error! No se pudo modificar el usuario" + ex.getMessage();
         }
+        return msg;
     }
 }

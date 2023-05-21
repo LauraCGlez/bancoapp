@@ -7,6 +7,7 @@ import com.banco.bancoapp.models.UserModel;
 import com.banco.bancoapp.repositories.AccountRepo;
 import com.banco.bancoapp.repositories.TransactionRepo;
 import com.banco.bancoapp.repositories.UserRepo;
+import javafx.scene.control.Alert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +15,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-
 @Service
 public class TransactionService {
-    private final String[] typeList = {"tranferir", "ingresar", "retirar"};
     @Autowired
     private TransactionRepo transactionRepo;
     @Autowired
@@ -25,43 +24,102 @@ public class TransactionService {
     @Autowired
     private AccountRepo accountRepo;
 
-}
-
-
-    /*
-    public Iterable<TransactionModel> listarTransacciones(){
+    public Iterable<TransactionModel> listTransactions() {
         return transactionRepo.findAll();
-    }*/
+    }
 
-    /*
-    public double transaccion(UserModel userModel, AccountModel accountModel, double cantidad, TipoOpModel tipoOpModel){
-        boolean esTitular = accountModel.getUserModels().contains(userModel);
+    public void createTransaction(TransactionModel transaction) {
 
-        if (cantidad == 0){
-            throw new IllegalArgumentException("La cantidad no puede ser igual a cero");
-        }
+        try {
+            boolean esTitular = false;
+            UserModel titular = transaction.getTitular();
+            AccountModel cuentaOrigen = transaction.getCuentaOrigen();
 
-        if (!esTitular){
-            throw new IllegalArgumentException("El usuario no es titular de la cuenta");
-        }
+            UserModel titularBD = findUserByNif(titular.getNif());
+            Optional <AccountModel> optionalValue = findAccountModelsByUserModelsContaining(cuentaOrigen.getNumeroCuenta());
+            AccountModel cuentaOrigenBD = null;
 
-        if (tipoOpModel == TipoOpModel.INGRESAR){
-            double nuevoSaldo = accountModel.getSaldo() + cantidad;
-            accountModel.setSaldo(nuevoSaldo);
-        } else if (tipoOpModel == TipoOpModel.RETIRAR){
-            if (accountModel.getSaldo() >= cantidad){
-                double nuevoSaldo = accountModel.getSaldo() - cantidad;
-                accountModel.setSaldo(nuevoSaldo);
-            } else {
-                return accountModel.getSaldo();
+            if (optionalValue.isPresent()) {
+                cuentaOrigenBD = optionalValue.get();
+
+                for (UserModel owner: cuentaOrigenBD.getUserModels()) {
+                    if (owner.getNif().equals(titularBD.getNif())) {
+                        esTitular = true;
+                        break;
+                    }
+                }
             }
+
+            if (esTitular) {
+                transaction.setFechaOp(LocalDate.now());
+
+                if (!transaction.getTipoOp().equals(TipoOpModel.TRANSFERIR)) {
+                    transaction.setCuentaDestino(null);
+                }
+
+                if (operacion(transaction, cuentaOrigenBD)) {
+                    transactionRepo.save(transaction);
+                    mostrarMensaje("Transferencia creada");
+                } else {
+                    mostrarMensaje("Error");
+                }
+
+            } else {
+                mostrarMensaje("El usuario no es titular de la cuenta");
+            }
+
+        } catch (Exception e) {
+            mostrarMensaje("No se pudo realizar la transaccion");
         }
+    }
 
-        return accountModel.getSaldo();
-    }*/
+    public boolean operacion(TransactionModel transactionModel, AccountModel cuentaOrigen) {
+        boolean transferenciaHecha = true;
+        double cantidad = transactionModel.getCantidad();
+        transactionRepo.save(transactionModel);
 
+        if (transactionModel.getTipoOp().equals(TipoOpModel.TRANSFERIR)) {
+            int cuentaOrigenNumero = cuentaOrigen.getNumeroCuenta();
+            int cuentaDestinoNumero = transactionModel.getCuentaDestino().getNumeroCuenta();
 
+            if (findAccountModelsByUserModelsContaining(cuentaDestinoNumero).isPresent()) {
+                AccountModel cuentaDestino = findAccountModelsByUserModelsContaining(cuentaDestinoNumero).get();
+                cuentaDestino.ingresarDinero(cantidad);
+                boolean retiro = cuentaOrigen.retirarDinero(cantidad);
 
+                if (cuentaOrigenNumero != cuentaDestinoNumero) {
+                    accountRepo.save(cuentaDestino);
+                    accountRepo.save(cuentaOrigen);
+                    transferenciaHecha = retiro;
+                }
+            }
+        } else if (transactionModel.getTipoOp().equals(TipoOpModel.INGRESAR)) {
+            cuentaOrigen.ingresarDinero(cantidad);
+            accountRepo.save(cuentaOrigen);
+            transferenciaHecha = true;
+        } else if (transactionModel.getTipoOp().equals(TipoOpModel.RETIRAR)) {
+            transferenciaHecha = cuentaOrigen.retirarDinero(cantidad);
+        }
+        return transferenciaHecha;
+    }
+
+    private UserModel findUserByNif(String nif) {
+        List<UserModel> userList = userRepo.findUserByNif(nif);
+        return userList.get(0);
+    }
+
+    public Optional<AccountModel> findAccountModelsByUserModelsContaining(int account) {
+        return accountRepo.findById(account);
+    }
+
+    private void mostrarMensaje(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Mensaje");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+}
 
 
 

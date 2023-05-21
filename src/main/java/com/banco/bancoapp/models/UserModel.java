@@ -12,7 +12,6 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-
 @Entity
 @Table(name = "users")
 public class UserModel {
@@ -43,88 +42,88 @@ public class UserModel {
     private String pass;
 
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "userModels", cascade = CascadeType.ALL)
-    private List<AccountModel> accountModels = new ArrayList<AccountModel>();
+    private List<AccountModel> accountModels = new ArrayList<>();
 
-    //TODO GETTER AND SETTER
-    public String getNif() {
-        return nif;
-    }
 
-    public void setNif(String nif) {
-        this.nif = nif;
-    }
-
-    public String getApellidos() {
-        return apellidos;
-    }
-
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getAnyoNacimiento() {
-        return anyoNacimiento;
-    }
-
-    public void setAnyoNacimiento(String anyoNacimiento) {
-        this.anyoNacimiento = anyoNacimiento;
-    }
-
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public int getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(int telefono) {
-        this.telefono = telefono;
-    }
-
-    public String getPass() {
-        return pass;
-    }
-
-    public void setPass(String pass) {
-        this.pass = pass;
-    }
-
-    public List<AccountModel> getAccountModels() {
-        return accountModels;
-    }
-
-    public void listAccountModels(List<AccountModel> accountModels) {
-        this.accountModels = accountModels;
-    }
-
-    public void addAccount(AccountModel accountModel){
-        this.accountModels.add(accountModel);
-        accountModel.getUserModels().add(this);
-    }
-
-    public void removeAccount(AccountModel accountModel){
-        this.accountModels.remove(accountModel);
-        accountModel.getUserModels().remove(this);
-    }
+//    public String getNif() {
+//        return nif;
+//    }
+//
+//    public void setNif(String nif) {
+//        this.nif = nif;
+//    }
+//
+//    public String getApellidos() {
+//        return apellidos;
+//    }
+//
+//    public void setApellidos(String apellidos) {
+//        this.apellidos = apellidos;
+//    }
+//
+//    public String getNombre() {
+//        return nombre;
+//    }
+//
+//    public void setNombre(String nombre) {
+//        this.nombre = nombre;
+//    }
+//
+//    public String getAnyoNacimiento() {
+//        return anyoNacimiento;
+//    }
+//
+//    public void setAnyoNacimiento(String anyoNacimiento) {
+//        this.anyoNacimiento = anyoNacimiento;
+//    }
+//
+//    public String getDireccion() {
+//        return direccion;
+//    }
+//
+//    public void setDireccion(String direccion) {
+//        this.direccion = direccion;
+//    }
+//
+//    public String getEmail() {
+//        return email;
+//    }
+//
+//    public void setEmail(String email) {
+//        this.email = email;
+//    }
+//
+//    public int getTelefono() {
+//        return telefono;
+//    }
+//
+//    public void setTelefono(int telefono) {
+//        this.telefono = telefono;
+//    }
+//
+//    public String getPass() {
+//        return pass;
+//    }
+//
+//    public void setPass(String pass) {
+//        this.pass = pass;
+//    }
+//
+//    public List<AccountModel> getAccountModels() {
+//        return accountModels;
+//    }
+//
+//    public void listAccountModels(List<AccountModel> accountModels) {
+//        this.accountModels = accountModels;
+//    }
+//
+//    public void addAccount(AccountModel accountModel){
+//        this.accountModels.add(accountModel);
+//        accountModel.getUserModels().add(this);
+//    }
+//
+//    public void removeAccount(AccountModel accountModel){
+//        this.accountModels.remove(accountModel);
+//        accountModel.getUserModels().remove(this);
+//    }
 }

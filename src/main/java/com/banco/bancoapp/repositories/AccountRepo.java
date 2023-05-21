@@ -15,4 +15,7 @@ public interface AccountRepo extends CrudRepository<AccountModel, Integer> {
     //List<AccountModel> listarCuentasPorUsuarios(UserModel userModel);
 
     List<AccountModel> findAccountModelsByUserModelsContaining(UserModel userModel);
+
+    AccountModel findByNumeroCuenta(int numeroCuenta);
+
 }

@@ -10,6 +10,5 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface UserAccounRepo extends CrudRepository<UserAccountModel, UserAccountIdModel> {
-    List<UserAccounRepo> findByUserModelAndAccountModel(UserModel userModel, AccountModel accountModel);
+public interface UserAccountRepo extends CrudRepository<UserAccountModel, UserAccountIdModel> {
 }

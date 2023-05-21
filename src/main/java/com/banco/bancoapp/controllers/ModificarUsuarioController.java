@@ -7,12 +7,15 @@ import com.banco.bancoapp.services.AccountService;
 import com.banco.bancoapp.services.UserService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import static com.banco.bancoapp.services.UserService.extracto;
 
@@ -20,20 +23,16 @@ import static com.banco.bancoapp.services.UserService.extracto;
 public class ModificarUsuarioController {
 
     @Autowired
+    OperacionesController operacionesController;
+    @Autowired
     private UserService userService;
-    @Autowired
-    private UserRepo userRepo;
-    @Autowired
-    private RegistroController registroController;
     private UserModel userModel;
-    @Autowired
-    private AccountService accountService;
     @FXML
     private TextField nombreTextField;
     @FXML
     private TextField apellidosTextField;
     @FXML
-    private TextField añoNacimientoTextField;
+    private TextField anyoNacimientoTextField;
     @FXML
     private TextField direccionTextField;
     @FXML
@@ -41,38 +40,35 @@ public class ModificarUsuarioController {
     @FXML
     private TextField telefonoTextField;
     @FXML
-    private TextField passTextField;
+    private PasswordField passField;
     @FXML
     private TextField nifTextField;
-    @Autowired
-    private MenuController menuController;
 
     @FXML
-    private void modificarUsuario () throws IOException {
-        String nif = nifTextField.getText();
-        String nombre = nombreTextField.getText();
-        String apellidos = apellidosTextField.getText();
-        String añoNacimiento = añoNacimientoTextField.getText();
-        String direccion = direccionTextField.getText();
-        String email = emailTextField.getText();
-        int telefono = Integer.parseInt(telefonoTextField.getText());
-        String pass = passTextField.getText();
+    private void modificarUsuario() throws IOException{
+        UserModel userModel = new UserModel();
+        userModel.setNif(nifTextField.getText());
+        userModel.setEmail(emailTextField.getText());
+        userModel.setNombre(nombreTextField.getText());
+        userModel.setApellidos(apellidosTextField.getText());
+        userModel.setDireccion(direccionTextField.getText());
+        userModel.setAnyoNacimiento(anyoNacimientoTextField.getText());
+        userModel.setTelefono(Integer.parseInt(telefonoTextField.getText()));
+        userModel.setPass(passField.getText());
 
-        // Crear un objeto UserModel con los valores actualizados
-        UserModel updatedUser = new UserModel();
-        updatedUser.setNif(nif);
-        updatedUser.setNombre(nombre);
-        updatedUser.setApellidos(apellidos);
-        updatedUser.setAnyoNacimiento(añoNacimiento);
-        updatedUser.setDireccion(direccion);
-        updatedUser.setEmail(email);
-        updatedUser.setTelefono(telefono);
-        updatedUser.setPass(pass);
-
-        // Llamar al método modificar del servicio UserService
-        userService.modificar(updatedUser);
+        String msg = userService.updateUser(userModel);
+        mostrarMensaje(msg);
 
         BancoappApplication.switchRoot("menu");
     }
+
+    private void mostrarMensaje(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Mensaje");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
 
 }

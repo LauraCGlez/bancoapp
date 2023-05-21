@@ -1,6 +1,7 @@
 package com.banco.bancoapp.models;
 
 import jakarta.persistence.*;
+import jdk.jfr.Unsigned;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -38,9 +39,16 @@ public class TransactionModel {
 
     @ManyToOne
     @JoinColumn(name = "usuario", referencedColumnName = "nif")
-    private UserModel user;
+    private UserModel titular;
 
-    //TODO GETTER AND SETTER
+    @Transient
+    private String cuentaOrigenStr;
+
+    @Transient
+    private String cuentaDestinoStr;
+
+    @Transient
+    private String titularStr;
 
     public int getCodigoOp() {
         return codigoOp;
@@ -90,11 +98,11 @@ public class TransactionModel {
         this.cuentaDestino = cuentaDestino;
     }
 
-    public UserModel getUser() {
-        return user;
+    public UserModel getTitular() {
+        return titular;
     }
 
-    public void setUser(UserModel user) {
-        this.user = user;
+    public void setTitular(UserModel user) {
+        this.titular = user;
     }
 }

@@ -71,7 +71,7 @@
          <Insets left="200.0" right="200.0" />
       </VBox.margin></TextField>
 
-   <Label alignment="CENTER" layoutX="10.0" layoutY="245.0" prefHeight="17.0" prefWidth="708.0" text="Telefono">
+   <Label alignment="CENTER" layoutX="10.0" layoutY="245.0" prefHeight="17.0" prefWidth="708.0" text="Teléfono">
       <VBox.margin>
          <Insets top="20.0" />
       </VBox.margin></Label>

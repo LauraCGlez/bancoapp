@@ -41,8 +41,11 @@ public class AccountModel {
     //TODO QUITAR ESTO DE AQUI
     public boolean retirarDinero(double cantidad){
         boolean posible = false;
-        if (saldo > 0 && saldo > cantidad){
+        if (saldo > cantidad){
             saldo -= cantidad;
+            posible = true;
+        } else {
+            posible = false;
         }
         return posible;
     }
@@ -101,4 +104,6 @@ public class AccountModel {
     public void setSaldo(double saldo) {
         this.saldo = saldo;
     }
+
+
 }

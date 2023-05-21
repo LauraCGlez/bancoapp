@@ -40,11 +40,7 @@ public class MenuController {
     @Autowired
     private UserService userService;
     @Autowired
-    private TransactionService transactionService;
-    @Autowired
     private UserAccountService userAccountService;
-    @Autowired
-    private UserRepo userRepo;
     @FXML
     private Label erroresLabel;
     @FXML
@@ -65,20 +61,6 @@ public class MenuController {
     private TableColumn<UserModel, String> nombreColumn;
     @FXML
     private TableColumn<UserModel, String> nifColum;
-    @FXML
-    private TextField nombreTextField;
-    @FXML
-    private TextField apellidosTextField;
-    @FXML
-    private TextField añoNacimientoTextField;
-    @FXML
-    private TextField direccionTextField;
-    @FXML
-    private TextField emailTextField;
-    @FXML
-    private TextField telefonoTextField;
-    @FXML
-    private TextField passTextField;
 
     @FXML
     private void initialize() {
@@ -86,26 +68,14 @@ public class MenuController {
         fechaColumn.setCellValueFactory(new PropertyValueFactory<>("fechaCreacion"));
         saldoColumn.setCellValueFactory(new PropertyValueFactory<>("saldo"));
 
-        /*
-        codigoOpColum.setCellValueFactory(new PropertyValueFactory<>("codigoOp"));
-        tipoOpColum.setCellValueFactory(new PropertyValueFactory<>("tipoOp"));
-        cantidadColum.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
-        fechaOpColum.setCellValueFactory(new PropertyValueFactory<>("fechaOp"));
-
-         */
         nombreColumn.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         nifColum.setCellValueFactory(new PropertyValueFactory<>("nif"));
     }
 
     @FXML
     public void triggerCrearCuenta() {
-
         if (nifTextField == null) {
-            String mensaje = "Debe introducir un NIF";
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Mensaje");
-            alert.setContentText(mensaje);
-            alert.showAndWait();
+            mostrarMensaje("Debe introducir un NIF");
         } else {
             String nif = nifTextField.getText();
             UserModel user = new UserModel();
@@ -131,14 +101,24 @@ public class MenuController {
         accountService.añadirUsuarioCuenta(nif, numeroCuenta);
     }
 
-    //TODO
-    // ----> eliminar titular button
     @FXML
     private void triggerEliminar() {
-        int numeroCuenta = Integer.parseInt(cuentaTextField.getText());
         String nif = nifTextField.getText();
-        UserModel user = (UserModel) userRepo.findUserByNif(nif);
-        userAccountService.eliminarUsuario(String.valueOf(user), numeroCuenta);
+        int numeroCuenta = Integer.parseInt(cuentaTextField.getText());
+
+        UserModel usuario = userService.findUserByNif(nif);
+        AccountModel cuenta = accountService.findAccountByNumeroCuenta(numeroCuenta);
+
+        if (usuario != null && cuenta != null) {
+            boolean eliminado = userAccountService.eliminarTitular(usuario, cuenta);
+            if (eliminado) {
+                mostrarMensaje("El usuario ya no es titular de la cuenta.");
+            } else {
+                mostrarMensaje("No se pudo eliminar al usuario como titular de la cuenta.");
+            }
+        } else {
+            mostrarMensaje("Por favor, selecciona un usuario y una cuenta para eliminar la relación.");
+        }
     }
 
     @FXML
@@ -168,8 +148,16 @@ public class MenuController {
     }
 
     @FXML
-    public void modificar() throws IOException{
+    private void modificar () throws IOException {
         BancoappApplication.switchRoot("modificar");
+    }
+
+    public void mostrarMensaje(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Mensaje");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 
 }

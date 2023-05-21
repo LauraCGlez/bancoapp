@@ -24,32 +24,31 @@ public class AccountService {
     private UserRepo userRepo;
     @Autowired
     private TransactionRepo transactionRepo;
+    private AccountModel accountModel;
 
     public Iterable<TransactionModel> operaciones(String cuenta){
-
         return transactionRepo.findAllByCodigoOp(cuenta);
     }
 
-    //LISTAR CUENTAS POR UN IDENTIFICADOR
+    public AccountModel findAccountByNumeroCuenta(int numeroCuenta) {
+        return accountRepo.findByNumeroCuenta(numeroCuenta);
+    }
+
     public Optional<AccountModel> listarCuentasPorId(int cuenta){
 
         return accountRepo.findById(cuenta);
     }
 
-    //LISTAR TODAS LAS CUENTAS
     public Iterable<AccountModel> listarCuentas(){
         return accountRepo.findAll();
     }
 
-
-    //APARTADO 1
     public String crearCuenta(AccountModel accountModel, UserModel userModel) {
         String msg = "";
         Random random = new Random();
         int randomNumber = random.nextInt(900000000) + 1000000000;
         UserModel user = findUserByNif(userModel.getNif());
 
-        //CREAMOS LA CUENTA
         accountModel.setNumeroCuenta(randomNumber);
         accountModel.getUserModels().add(user);
         accountModel.setFechaCreacion(LocalDate.now().toString());
@@ -83,23 +82,6 @@ public class AccountService {
         return lista;
     }
 
-    //APARTADO 3
-    //ELIMINAR TITULAR DE LA CUENTA
-    /*
-    public void eliminarUsuario(String nif, int cuenta){
-        if (listarTitulares(cuenta).size() > 1){
-            try {
-                AccountModel accountModel = listarCuentasPorId(cuenta).get();
-                UserModel userModel = findUserByNif(nif);
-                accountModel.getUserModels().remove(userModel);
-                accountRepo.save(accountModel);
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-    } */
-
-    //AÑADIR TITULAR A LA CUENTA
     public void añadirUsuarioCuenta(String nif, int cuenta){
         if (listarTitulares(cuenta).size() < 2){
             try {

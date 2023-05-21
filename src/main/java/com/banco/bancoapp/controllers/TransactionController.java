@@ -45,4 +45,9 @@ public class TransactionController {
         fechaOpColumn.setCellValueFactory(new PropertyValueFactory<>("fechaOp"));
     }
 
+    public void createTransaction(TransactionModel transaction) {
+        transactionService.createTransaction(transaction);
+    }
+
+
 }
