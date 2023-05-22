@@ -22,7 +22,7 @@ public class BancoappApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         BancoappApplication.stage = stage;
-        scene = new Scene(loadFXML("operaciones"), 700, 700);
+        scene = new Scene(loadFXML("login"), 700, 700);
         scene.getStylesheets().add("com/banco/bancoapp/css/styles.css");
         stage.setMinHeight(700);
         stage.setMinWidth(700);

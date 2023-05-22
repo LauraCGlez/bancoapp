@@ -1,7 +1,6 @@
 package com.banco.bancoapp.models;
 
 import jakarta.persistence.*;
-import jdk.jfr.Unsigned;
 import lombok.*;
 
 import java.time.LocalDate;
